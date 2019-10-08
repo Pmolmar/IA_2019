@@ -13,6 +13,16 @@ private:
     int prof;
 
 public:
-    node_t(float A, int B, int C);
+    node_t(float coste, int id, int profundidad);
     ~node_t();
+
+    void set_papa(node_t *A) { padre = A; };
+    node_t *get_papa() { return padre; };
+
+    void set_son(node_t *A) { hijos.push_back(A); };
+    node_t *get_son(int i) { return hijos[i]; };
+
+    int get_prof() { return prof; };
+    int get_id() { return id; };
+    float get_cost() { return coste; };
 };

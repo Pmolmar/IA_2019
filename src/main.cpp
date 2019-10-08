@@ -55,4 +55,5 @@ int main()
     std::cin >> fin;
 
     tree_t arbol(val, ini, fin);
+    arbol.mostrar();
 }

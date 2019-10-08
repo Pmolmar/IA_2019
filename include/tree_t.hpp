@@ -6,14 +6,18 @@
 class tree_t
 {
 private:
-    std::vector<node_t> nodos;
+    std::vector<node_t *> nodos;
     std::vector<std::vector<float>> costes;
-    int ini, fin;
+    int ini, fin, n;
 
 public:
     tree_t(std::vector<float> A, int B, int C);
     ~tree_t();
+    void mostrar();
 
 private:
-    void nodos(std::vector<float> A);
+    void map(std::vector<float> A);
+    void arbol(int ini, int fin);
+    void camino(node_t *A, int fin);
+    void traza(node_t *A, int pos);
 };
