@@ -19,5 +19,4 @@ private:
     void map(std::vector<float> A);
     void arbol(int ini, int fin);
     void camino(node_t *A, int fin);
-    void traza(node_t *A, int pos);
 };

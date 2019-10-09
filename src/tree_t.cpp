@@ -67,15 +67,6 @@ void tree_t::camino(node_t *A, int fin)
 
 void tree_t::mostrar()
 {
-    for(int i = 0; i < nodos.size(); ++i)
-        std::cout<< nodos[i]->get_id();
-    // traza(nodos[0], 0);
-}
-
-void tree_t::traza(node_t *A, int i)
-{
-    std::cout << A->get_id() << "{" << A->get_prof() << "}"
-              << "--->";
-    if (i < nodos.size())
-        traza(nodos[i + 1], i + 1);
+    for (int i = 0; i < nodos.size(); ++i)
+        std::cout << '(' << nodos[i]->get_prof() << ')' << nodos[i]->get_id() << "->";
 }

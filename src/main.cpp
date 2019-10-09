@@ -48,7 +48,7 @@ int main()
         val.push_back(std::stof(aux));
     }
 
-    std::cout << "Los nodos van del 1 al " << val[0] << " ." << std::endl;
+    std::cout << "Los nodos van del 0 al " << val[0]-1 << " ." << std::endl;
     std::cout << "Introduzca inicio: ";
     std::cin >> ini;
     std::cout << "Introduzca fin: ";
