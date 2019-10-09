@@ -20,7 +20,7 @@ public:
     node_t *get_papa() { return padre; };
 
     void set_son(node_t *A) { hijos.push_back(A); };
-    node_t *get_son(int i) { return hijos[i]; };
+    std::vector<node_t *> &get_son() { return hijos; };
 
     int get_prof() { return prof; };
     int get_id() { return id; };

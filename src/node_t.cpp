@@ -2,7 +2,8 @@
 
 node_t::node_t(float A, int B, int C) : coste(A),
                                         id(B),
-                                        prof(C)
+                                        prof(C), 
+                                        heur(0)
 {
 }
 

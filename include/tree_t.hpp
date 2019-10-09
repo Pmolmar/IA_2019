@@ -7,6 +7,7 @@ class tree_t
 {
 private:
     std::vector<node_t *> nodos;
+    std::vector<node_t *> inspec;
     std::vector<std::vector<float>> costes;
     int ini, fin, n;
 
@@ -19,4 +20,5 @@ private:
     void map(std::vector<float> A);
     void arbol(int ini, int fin);
     void camino(node_t *A, int fin);
+    bool ready (node_t* A);
 };
