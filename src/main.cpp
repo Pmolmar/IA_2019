@@ -7,7 +7,8 @@
 
 int main()
 {
-    std::fstream fichero;
+    std::fstream f1;
+    std::fstream f2;
     std::string aux;
 
     std::cout << " (open) para abrir." << std::endl;
@@ -15,7 +16,7 @@ int main()
     std::cout << " (cd) para moverse entre directorio." << std::endl;
     std::cout << " Introduzca comando ";
 
-    while (!fichero.is_open())
+    while ((!f1.is_open()) && (!f2.is_open()))
     {
         std::cout << ": ";
         aux.clear();
@@ -23,10 +24,15 @@ int main()
 
         if (aux == "open")
         {
-            std::cout << "Introduzca nombre fichero: ";
+            std::cout << "Introduzca nombre f1: ";
             aux.clear();
             std::cin >> aux;
-            fichero.open(aux);
+            f1.open(aux);
+
+            std::cout << "Introduzca nombre f2: ";
+            aux.clear();
+            std::cin >> aux;
+            f2.open(aux);
         }
         if (aux == "ls")
         {
@@ -40,20 +46,32 @@ int main()
 
     std::cout << "Lectura correcta" << std::endl;
     std::vector<float> val;
+    std::vector<float> heu;
     int ini, fin;
 
-    while (!fichero.eof())
+    while (!f1.eof())
     {
-        getline(fichero, aux);
+        getline(f1, aux);
         val.push_back(std::stof(aux));
     }
 
-    std::cout << "Los nodos van del 0 al " << val[0]-1 << " ." << std::endl;
-    std::cout << "Introduzca inicio: ";
-    std::cin >> ini;
-    std::cout << "Introduzca fin: ";
-    std::cin >> fin;
+    while (!f2.eof())
+    {
+        getline(f2, aux);
+        heu.push_back(std::stof(aux));
+    }
 
-    tree_t arbol(val, ini, fin);
-    arbol.mostrar();
+    if (val[0] == heu[0])
+    {
+        std::cout << "Los nodos van del 0 al " << val[0] - 1 << " ." << std::endl;
+        std::cout << "Introduzca inicio: ";
+        std::cin >> ini;
+        std::cout << "Introduzca fin: ";
+        std::cin >> fin;
+
+        tree_t arbol(val, heu, ini, fin);
+        arbol.mostrar();
+    }
+    else
+        std::cout<<"Fichero no valido."<<std::endl;
 }

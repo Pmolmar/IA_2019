@@ -13,7 +13,7 @@ private:
     int prof;
 
 public:
-    node_t(float coste, int id, int profundidad);
+    node_t(float coste, int id, int profundidad, float heuristico);
     ~node_t();
 
     void set_papa(node_t *A) { padre = A; };
@@ -25,4 +25,5 @@ public:
     int get_prof() { return prof; };
     int get_id() { return id; };
     float get_cost() { return coste; };
+    float get_heur() { return heur; };
 };

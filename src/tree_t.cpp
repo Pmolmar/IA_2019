@@ -1,9 +1,9 @@
 #include "tree_t.hpp"
 
-tree_t::tree_t(std::vector<float> A, int B, int C) : ini(B),
-                                                     fin(C)
+tree_t::tree_t(std::vector<float> A, std::vector<float> B, int C, int D) : ini(C),
+                                                                           fin(D)
 {
-    map(A);
+    map(A,B);
     arbol(ini, fin);
 }
 
@@ -11,18 +11,18 @@ tree_t::~tree_t()
 {
 }
 
-void tree_t::map(std::vector<float> A)
+void tree_t::map(std::vector<float> A, std::vector<float> B)
 {
     int aux = 1;
     n = A[0];
 
+    //redimension de matriz de costes
     costes.resize(n);
 
     for (int i = 0; i < n; i++)
-    {
         costes[i].resize(n);
-    }
 
+    //mapeo de costes
     for (int i = 0; i < n; i++)
     {
         for (int j = i + 1; j < n; ++j)
@@ -31,19 +31,30 @@ void tree_t::map(std::vector<float> A)
             costes[j][i] = A[aux];
             aux++;
         }
-        costes[i][i] = 0;
+        costes[i][i] = -1;
     }
+    
+    //mapeo de heuristicos
+    for(int i = 0; i < n; ++i)
+        heur[i]=B[i+1];
+
+    // for (int i = 0; i < n; i++)
+    // {
+    //     for (int j = 0; j < n; ++j)
+    //         std::cout<<costes[i][j]<<'\t';
+    //     std::cout<<std::endl;
+    // }
 }
 
 void tree_t::arbol(int ini, int fin)
 {
     node_t *aux;
-    aux = new node_t(0, ini, 0);
+    aux = new node_t(0, ini, 0, heur[ini]);
 
     camino(aux, fin);
 }
 
-//tengo que coger el nodo, inspeccionarlo, generar hijos, coger el nodo 
+//tengo que coger el nodo, inspeccionarlo, generar hijos, coger el nodo
 //con menor heuristica sea hijo o no
 
 //si se vuelve a repetir un nodo, vemos cual es el de menor coste y ese ok
@@ -63,7 +74,7 @@ void tree_t::camino(node_t *A, int fin)
             if (x != 0)
             {
                 node_t *nodo;
-                nodo = new node_t(A->get_cost() + x, i, A->get_prof() + 1);
+                nodo = new node_t(A->get_cost() + x, i, A->get_prof() + 1, heur[i + 1]);
 
                 nodo->set_papa(A);
                 if (!ready(nodo))
