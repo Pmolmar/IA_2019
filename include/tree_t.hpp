@@ -22,4 +22,6 @@ private:
     void arbol(int ini, int fin);
     void camino(node_t *A, int fin);
     bool ready (node_t* A);
+    void generate_sons(node_t * A);
+    node_t * less_heur();
 };

@@ -3,7 +3,7 @@
 tree_t::tree_t(std::vector<float> A, std::vector<float> B, int C, int D) : ini(C),
                                                                            fin(D)
 {
-    map(A,B);
+    map(A, B);
     arbol(ini, fin);
 }
 
@@ -22,7 +22,7 @@ void tree_t::map(std::vector<float> A, std::vector<float> B)
     for (int i = 0; i < n; i++)
         costes[i].resize(n);
 
-    //mapeo de costes
+    // mapeo de costes
     for (int i = 0; i < n; i++)
     {
         for (int j = i + 1; j < n; ++j)
@@ -33,17 +33,10 @@ void tree_t::map(std::vector<float> A, std::vector<float> B)
         }
         costes[i][i] = -1;
     }
-    
-    //mapeo de heuristicos
-    for(int i = 0; i < n; ++i)
-        heur[i]=B[i+1];
 
-    // for (int i = 0; i < n; i++)
-    // {
-    //     for (int j = 0; j < n; ++j)
-    //         std::cout<<costes[i][j]<<'\t';
-    //     std::cout<<std::endl;
-    // }
+    //mapeo de heuristicos
+    for (int i = 0; i < n; ++i)
+        heur.push_back(B[i + 1]);
 }
 
 void tree_t::arbol(int ini, int fin)
@@ -51,6 +44,8 @@ void tree_t::arbol(int ini, int fin)
     node_t *aux;
     aux = new node_t(0, ini, 0, heur[ini]);
 
+    inspec.push_back(aux);
+    aux->set_papa(aux);
     camino(aux, fin);
 }
 
@@ -63,28 +58,19 @@ void tree_t::arbol(int ini, int fin)
 
 void tree_t::camino(node_t *A, int fin)
 {
-    nodos.push_back(A);
-
-    if (A->get_id() != fin)
-    {
-        for (int i = 0; i < n; ++i)
+    if(A->get_id()!=fin)
+        if (ready(A))
         {
-            float x = costes[A->get_id()][i];
-
-            if (x != 0)
+            nodos.push_back(A);
+            if (A->get_cost() <= inspec[inspec.size() - 1]->get_cost())
             {
-                node_t *nodo;
-                nodo = new node_t(A->get_cost() + x, i, A->get_prof() + 1, heur[i + 1]);
-
-                nodo->set_papa(A);
-                if (!ready(nodo))
-                {
-                    A->set_son(nodo);
-                    camino(nodo, fin);
-                }
+                inspec.push_back(A);
+                generate_sons(A);
+                node_t *aux;
+                aux = less_heur();
+                camino(aux, fin);
             }
         }
-    }
 }
 
 bool tree_t::ready(node_t *A)
@@ -97,8 +83,44 @@ bool tree_t::ready(node_t *A)
     return false;
 }
 
+void tree_t::generate_sons(node_t *A)
+{
+    for (int i = 0; i < n; ++i)
+    {
+        float x = costes[A->get_id()][i];
+
+        if ((x != 0) && (A->get_papa()->get_id() != i))
+        {
+            node_t *nodo;
+            nodo = new node_t(A->get_cost() + x, i, A->get_prof() + 1, heur[i + 1]);
+
+            nodo->set_papa(A);
+            nodos.push_back(nodo);
+            A->set_son(nodo);
+        }
+    }
+}
+
+node_t *tree_t::less_heur()
+{
+    node_t *aux;
+    aux = inspec[0];
+    for (unsigned int i = 0; i < nodos.size(); ++i)
+    {
+        if ((nodos[i]->get_cost() < inspec[inspec.size() - 1]->get_cost()) && (nodos[i]->get_cost() < aux->get_cost()))
+            aux = nodos[i];
+    }
+    return aux;
+}
+
 void tree_t::mostrar()
 {
-    for (unsigned int i = 0; i < nodos.size(); ++i)
-        std::cout << '(' << nodos[i]->get_prof() << ')' << nodos[i]->get_id() << "->";
+    node_t *aux = inspec[inspec.size() - 1];
+    std::cout << aux->get_id() << "-->";
+    aux = aux->get_papa();
+    while (aux->get_id() != aux->get_papa()->get_id())
+    {
+        std::cout << aux->get_id() << "-->";
+        aux = aux->get_papa();
+    }
 }

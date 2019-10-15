@@ -12,8 +12,7 @@ int main()
     std::string aux;
 
     std::cout << " (open) para abrir." << std::endl;
-    std::cout << " (ls) para mostrar contenido directorio." << std::endl;
-    std::cout << " (cd) para moverse entre directorio." << std::endl;
+    std::cout << " (list) para mostrar contenido directorio." << std::endl;
     std::cout << " Introduzca comando ";
 
     while ((!f1.is_open()) && (!f2.is_open()))
@@ -34,13 +33,9 @@ int main()
             std::cin >> aux;
             f2.open(aux);
         }
-        if (aux == "ls")
+        if (aux == "list")
         {
-            std::cout << "xD ";
-        }
-        if (aux == "cd")
-        {
-            std::cout << "xD ";
+            system("ls -m");
         }
     }
 
