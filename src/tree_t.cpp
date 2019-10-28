@@ -3,8 +3,10 @@
 tree_t::tree_t(std::vector<float> A, std::vector<float> B, int C, int D) : ini(C),
                                                                            fin(D)
 {
+    vertices = A.size() - 1
+    ;
     map(A, B);
-    arbol(ini, fin);
+    arbol();
 }
 
 tree_t::~tree_t()
@@ -39,40 +41,36 @@ void tree_t::map(std::vector<float> A, std::vector<float> B)
         heur.push_back(B[i + 1]);
 }
 
-void tree_t::arbol(int ini, int fin)
+//crea el nodo raiz, lo inspecciona y da paso al algoritmo principal
+void tree_t::arbol()
 {
     node_t *aux;
     aux = new node_t(0, ini, 0, heur[ini]);
 
-    inspec.push_back(aux);
+    nodos.push_back(aux);
     aux->set_papa(aux);
-    camino(aux, fin);
+    camino(aux);
 }
 
-//tengo que coger el nodo, inspeccionarlo, generar hijos, coger el nodo
-//con menor heuristica sea hijo o no
-
-//si se vuelve a repetir un nodo, vemos cual es el de menor coste y ese ok
-
-//vamos que hay que cambiar casi todo xD
-
-void tree_t::camino(node_t *A, int fin)
+void tree_t::camino(node_t *A)
 {
-    if(A->get_id()!=fin)
-        if (ready(A))
+    if (A->get_id() != fin)
+    {
+        if (!ready(A))
         {
-            nodos.push_back(A);
-            if (A->get_cost() <= inspec[inspec.size() - 1]->get_cost())
-            {
-                inspec.push_back(A);
-                generate_sons(A);
-                node_t *aux;
-                aux = less_heur();
-                camino(aux, fin);
-            }
+            inspec.push_back(A);
+            generate_sons(A);
+
+            camino(search());
         }
+    }
+    else
+    {
+        inspec.push_back(A);
+    }
 }
 
+//comprobar que el nodo A no esta inspeccionado
 bool tree_t::ready(node_t *A)
 {
     for (unsigned int i = 0; i < inspec.size(); i++)
@@ -83,13 +81,14 @@ bool tree_t::ready(node_t *A)
     return false;
 }
 
+//genera los hijos de un nodo A
 void tree_t::generate_sons(node_t *A)
 {
     for (int i = 0; i < n; ++i)
     {
         float x = costes[A->get_id()][i];
 
-        if ((x != 0) && (A->get_papa()->get_id() != i))
+        if ((x != -1) && (A->get_papa()->get_id() != i))
         {
             node_t *nodo;
             nodo = new node_t(A->get_cost() + x, i, A->get_prof() + 1, heur[i + 1]);
@@ -101,26 +100,51 @@ void tree_t::generate_sons(node_t *A)
     }
 }
 
-node_t *tree_t::less_heur()
+//busca el nodo con menor coste que no este inspeccionado
+node_t *tree_t::search()
 {
     node_t *aux;
-    aux = inspec[0];
+    node_t *best = NULL;
+
     for (unsigned int i = 0; i < nodos.size(); ++i)
     {
-        if ((nodos[i]->get_cost() < inspec[inspec.size() - 1]->get_cost()) && (nodos[i]->get_cost() < aux->get_cost()))
-            aux = nodos[i];
+        aux = nodos[i];
+
+        if ((best == NULL) && (!ready(aux)))
+            if ((aux->get_cost() + aux->get_heur()) < 9999)
+                best = aux;
+        if ((!ready(aux)) && (min(aux, best)))
+            best = aux;
     }
-    return aux;
+
+    return best;
+}
+
+//devuelve si los costes totales de A son menores a B
+bool tree_t::min(node_t *A, node_t *B)
+{
+    if ((A->get_cost() + A->get_heur()) < (B->get_cost() + B->get_heur()))
+        return true;
+    else
+        return false;
 }
 
 void tree_t::mostrar()
 {
-    node_t *aux = inspec[inspec.size() - 1];
-    std::cout << aux->get_id() << "-->";
-    aux = aux->get_papa();
-    while (aux->get_id() != aux->get_papa()->get_id())
+    bool i = true;
+    node_t * aux = inspec[inspec.size()-1];
+
+    while(i)
     {
-        std::cout << aux->get_id() << "-->";
-        aux = aux->get_papa();
+        if(aux->get_id() != ini)
+        {
+            std::cout<<aux->get_id()<<" --> ";
+            aux = aux->get_papa();
+        }
+        else
+        {
+            std::cout<<aux->get_id()<<std::endl;
+            i = false;
+        }
     }
 }

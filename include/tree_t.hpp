@@ -10,7 +10,7 @@ private:
     std::vector<node_t *> inspec;
     std::vector<std::vector<float>> costes;
     std::vector<float> heur;
-    int ini, fin, n;
+    int ini, fin, n, vertices;
 
 public:
     tree_t(std::vector<float> costes, std::vector<float> heuristicos, int ini, int fin);
@@ -19,9 +19,10 @@ public:
 
 private:
     void map(std::vector<float> coste, std::vector<float> heur);
-    void arbol(int ini, int fin);
-    void camino(node_t *A, int fin);
-    bool ready (node_t* A);
-    void generate_sons(node_t * A);
-    node_t * less_heur();
+    void arbol();
+    void camino(node_t *A);
+    bool ready(node_t *A);
+    void generate_sons(node_t *A);
+    node_t *search();
+    bool min(node_t *A, node_t *B);
 };
