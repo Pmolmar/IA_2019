@@ -3,8 +3,7 @@
 tree_t::tree_t(std::vector<float> A, std::vector<float> B, int C, int D) : ini(C),
                                                                            fin(D)
 {
-    vertices = A.size() - 1
-    ;
+    vertices = A.size() - 1;
     map(A, B);
     arbol();
 }
