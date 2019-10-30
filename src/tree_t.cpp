@@ -1,9 +1,9 @@
 #include "tree_t.hpp"
 
 tree_t::tree_t(std::vector<float> A, std::vector<float> B, int C, int D) : ini(C),
-                                                                           fin(D)
+                                                                           fin(D),
+                                                                           aristas(0)
 {
-    vertices = A.size() - 1;
     map(A, B);
     arbol();
 }
@@ -31,6 +31,8 @@ void tree_t::map(std::vector<float> A, std::vector<float> B)
             costes[i][j] = A[aux];
             costes[j][i] = A[aux];
             aux++;
+            if (A[aux] != -1)
+                aristas++;
         }
         costes[i][i] = -1;
     }
@@ -131,19 +133,31 @@ bool tree_t::min(node_t *A, node_t *B)
 void tree_t::mostrar()
 {
     bool i = true;
-    node_t * aux = inspec[inspec.size()-1];
+    node_t *aux = inspec[inspec.size() - 1];
 
-    while(i)
+    system("clear");
+    std::cout << "-----------------------------" << std::endl;
+    std::cout << "Nodos: " << n << std::endl;
+    std::cout << "Aristas: " << aristas << std::endl;
+    std::cout << "Inicio: " << ini << std::endl;
+    std::cout << "Fin: " << fin << std::endl;
+    std::cout << "Costes: " << inspec[inspec.size() - 1]->get_cost() << std::endl;
+    std::cout << "Nodos Generados: " << nodos.size() << std::endl;
+    std::cout << "Nodos Inspeccionados: " << inspec.size() << std::endl;
+    std::cout << "Camino: ";
+
+    while (i)
     {
-        if(aux->get_id() != ini)
+        if (aux->get_id() != ini)
         {
-            std::cout<<aux->get_id()<<" --> ";
+            std::cout << aux->get_id() << " --> ";
             aux = aux->get_papa();
         }
         else
         {
-            std::cout<<aux->get_id()<<std::endl;
+            std::cout << aux->get_id() << std::endl;
             i = false;
         }
     }
+    std::cout << std::endl;
 }

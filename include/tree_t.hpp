@@ -10,7 +10,7 @@ private:
     std::vector<node_t *> inspec;
     std::vector<std::vector<float>> costes;
     std::vector<float> heur;
-    int ini, fin, n, vertices;
+    int ini, fin, n, aristas;
 
 public:
     tree_t(std::vector<float> costes, std::vector<float> heuristicos, int ini, int fin);
