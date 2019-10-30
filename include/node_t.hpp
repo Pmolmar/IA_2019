@@ -5,7 +5,7 @@
 class node_t
 {
 private:
-    node_t *padre;
+    node_t *padre = this;
     std::vector<node_t *> hijos;
     float coste;
     float heur;
@@ -26,4 +26,6 @@ public:
     int get_id() { return id; };
     float get_cost() { return coste; };
     float get_heur() { return heur; };
+    float get_val() {return coste + heur;};
+    bool antecesor(int i);
 };

@@ -15,7 +15,7 @@ int main()
 
     while (!end)
     {
-        std::cout <<"-----------------------------"<<std::endl;
+        std::cout << "-----------------------------" << std::endl;
         std::cout << " (open) para abrir." << std::endl;
         std::cout << " (list) para mostrar contenido directorio." << std::endl;
         std::cout << " (goto) para moverse entre directorios. " << std::endl;
@@ -25,7 +25,7 @@ int main()
 
         while ((!f1.is_open()) && (!f2.is_open()))
         {
-            std::cout <<": ";
+            std::cout << ": ";
             aux.clear();
             std::cin >> aux;
 
@@ -45,8 +45,8 @@ int main()
             }
             if (aux == "list")
             {
-                aux = ("ls -l ");
-                aux = aux + dir + " | cut -d ' ' -f 10";
+                aux = ("ls --width=1 ");
+                aux = aux + dir;
                 system(aux.c_str());
             }
             if (aux == "goto")
@@ -61,7 +61,7 @@ int main()
                 end = true;
                 break;
             }
-            if(aux == "home")
+            if (aux == "home")
                 dir = ".";
         }
 
@@ -89,13 +89,13 @@ int main()
 
             if (val[0] == heu[0])
             {
-                std::cout << "Los nodos van del 0 al " << val[0] - 1 << " ." << std::endl;
+                std::cout << "Los nodos van del 1 al " << val[0] << " ." << std::endl;
                 std::cout << "Introduzca inicio: ";
                 std::cin >> ini;
                 std::cout << "Introduzca fin: ";
                 std::cin >> fin;
 
-                tree_t arbol(val, heu, ini, fin);
+                tree_t arbol(val, heu, ini - 1, fin - 1);
                 arbol.mostrar();
             }
             else

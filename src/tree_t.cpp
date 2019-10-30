@@ -59,6 +59,8 @@ void tree_t::camino(node_t *A)
     {
         if (!ready(A))
         {
+            std::cout << std::endl
+                      << " Nodo: " << A->get_id() + 1;
             inspec.push_back(A);
             generate_sons(A);
 
@@ -76,7 +78,7 @@ bool tree_t::ready(node_t *A)
 {
     for (unsigned int i = 0; i < inspec.size(); i++)
     {
-        if (inspec[i]->get_id() == A->get_id())
+        if ((inspec[i]->get_id() == A->get_id()) && (inspec[i]->get_val() == A->get_val()))
             return true;
     }
     return false;
@@ -89,13 +91,14 @@ void tree_t::generate_sons(node_t *A)
     {
         float x = costes[A->get_id()][i];
 
-        if ((x != -1) && (A->get_papa()->get_id() != i))
+        if ((x != -1) && (!A->antecesor(i)))
         {
             node_t *nodo;
-            nodo = new node_t(A->get_cost() + x, i, A->get_prof() + 1, heur[i + 1]);
+            nodo = new node_t(A->get_cost() + x, i, A->get_prof() + 1, heur[i]);
 
             nodo->set_papa(A);
             nodos.push_back(nodo);
+            std::cout << " g:" << nodo->get_id() + 1 << "(" << nodo->get_val() << ") ";
             A->set_son(nodo);
         }
     }
@@ -112,7 +115,7 @@ node_t *tree_t::search()
         aux = nodos[i];
 
         if ((best == NULL) && (!ready(aux)))
-            if ((aux->get_cost() + aux->get_heur()) < 9999)
+            if ((aux->get_val()) < 9999)
                 best = aux;
         if ((!ready(aux)) && (min(aux, best)))
             best = aux;
@@ -124,7 +127,7 @@ node_t *tree_t::search()
 //devuelve si los costes totales de A son menores a B
 bool tree_t::min(node_t *A, node_t *B)
 {
-    if ((A->get_cost() + A->get_heur()) < (B->get_cost() + B->get_heur()))
+    if (A->get_val() < B->get_val())
         return true;
     else
         return false;
@@ -135,27 +138,27 @@ void tree_t::mostrar()
     bool i = true;
     node_t *aux = inspec[inspec.size() - 1];
 
-    system("clear");
+    //system("clear");
     std::cout << "-----------------------------" << std::endl;
     std::cout << "Nodos: " << n << std::endl;
     std::cout << "Aristas: " << aristas << std::endl;
-    std::cout << "Inicio: " << ini << std::endl;
-    std::cout << "Fin: " << fin << std::endl;
+    std::cout << "Inicio: " << ini + 1 << std::endl;
+    std::cout << "Fin: " << fin + 1 << std::endl;
     std::cout << "Costes: " << inspec[inspec.size() - 1]->get_cost() << std::endl;
-    std::cout << "Nodos Generados: " << nodos.size() << std::endl;
-    std::cout << "Nodos Inspeccionados: " << inspec.size() << std::endl;
+    std::cout << "Nodos Generados: " << nodos.size() - 1 << std::endl;
+    std::cout << "Nodos Inspeccionados: " << inspec.size() - 1 << std::endl;
     std::cout << "Camino: ";
 
     while (i)
     {
         if (aux->get_id() != ini)
         {
-            std::cout << aux->get_id() << " --> ";
+            std::cout << aux->get_id() + 1 << " --> ";
             aux = aux->get_papa();
         }
         else
         {
-            std::cout << aux->get_id() << std::endl;
+            std::cout << aux->get_id() +1 << std::endl;
             i = false;
         }
     }
